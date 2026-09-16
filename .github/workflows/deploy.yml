@@ -42,3 +42,9 @@ jobs:
       - name: Deploy to S3
         run: |
           aws s3 sync build/ s3://devops-cicd-akash-2026 --delete
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id E2T6L0UGJNL539 \
+            --paths "/*"
