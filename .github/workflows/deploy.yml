@@ -1,0 +1,39 @@
+name: Deploy Website
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Test website files
+        run: |
+          test -f index.html
+          test -f style.css
+          test -f script.js
+
+      - name: Build / Package
+        run: |
+          mkdir build
+          cp index.html style.css script.js build/
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v5
+        with:
+          role-to-assume: arn:aws:iam::090885119887:role/GitHubActionsS3DeployRole
+          aws-region: ap-south-1
+
+      - name: Deploy to S3
+        run: |
+          aws s3 sync build/ s3://devops-cicd-akash-2026 --delete
