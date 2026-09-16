@@ -31,7 +31,7 @@ jobs:
       - name: Build / Package
         run: |
           mkdir build
-          cp index.html style.css script.js build/
+          cp index.html styles.css script.js build/
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v5
